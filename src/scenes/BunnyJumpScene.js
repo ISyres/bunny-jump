@@ -48,6 +48,9 @@ export default class BunnyJumpScene extends Phaser.Scene {
 
         // Initialize cursors variable
         cursors = this.input.keyboard.createCursorKeys()
+
+        // Create dead zone
+        this.cameras.main.setDeadzone(this.scale.width * 1.5)
     }
 
     update() {
@@ -82,5 +85,18 @@ export default class BunnyJumpScene extends Phaser.Scene {
                 platformChild.body.updateFromGameObject()
             }
         })
+
+        this.horizontalWrap(player)
+    }
+
+    horizontalWrap(sprite) {
+        const halfWidth = sprite.displayWidth * 0.5
+        const gameWidth = this.scale.width
+
+        if (sprite.x < -halfWidth) {
+            sprite.x = gameWidth + halfWidth
+        } else if (sprite.x > gameWidth + halfWidth) {
+            sprite.x = -halfWidth
+        }
     }
 }
