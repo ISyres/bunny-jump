@@ -2,6 +2,7 @@ import Phaser from 'phaser'
 
 var platforms
 var player
+var cursors
 
 export default class BunnyJumpScene extends Phaser.Scene {
     constructor() {
@@ -17,7 +18,7 @@ export default class BunnyJumpScene extends Phaser.Scene {
     }
 
     create() {
-        this.add.image(240, 320, 'background')
+        this.add.image(240, 320, 'background').setScrollFactor(1, 0)
 
         // Duplicate platforms
         platforms = this.physics.add.staticGroup()
@@ -44,6 +45,9 @@ export default class BunnyJumpScene extends Phaser.Scene {
 
         // Camera follow the player
         this.cameras.main.startFollow(player)
+
+        // Initialize cursors variable
+        cursors = this.input.keyboard.createCursorKeys()
     }
 
     update() {
@@ -59,5 +63,24 @@ export default class BunnyJumpScene extends Phaser.Scene {
         if (vy > 0 && player.texture.key !== 'bunny_stand') {
             player.setTexture('bunny_stand')
         }
+
+        // Create cursors for player
+        if (cursors.left.isDown && !touchingDown) {
+            player.setVelocityX(-200)
+        } else if (cursors.right.isDown && !touchingDown) {
+            player.setVelocityX(200)
+        } else {
+            player.setVelocityX(0)
+        }
+
+        platforms.children.iterate(child => {
+            const platformChild = child
+            const scrollY = this.cameras.main.scrollY
+
+            if (platformChild.y >= scrollY + 700) {
+                platformChild.y = scrollY - Phaser.Math.Between(50, 100)
+                platformChild.body.updateFromGameObject()
+            }
+        })
     }
 }
