@@ -36,9 +36,25 @@ export default class BunnyJumpScene extends Phaser.Scene {
         // Create player
         player = this.physics.add.sprite(240, 320, 'bunny_stand').setScale(0.5)
         this.physics.add.collider(player, platforms)
+
+        // Give collision up, left and right `false` value
+        player.body.checkCollision.up = false
+        player.body.checkCollision.left = false
+        player.body.checkCollision.right = false
     }
 
     update() {
-        
+        // Create player to jump up
+        const touchingDown = player.body.touching.down
+        const vy = player.body.velocity.y
+
+        if (touchingDown) {
+            player.setVelocityY(-300)
+            player.setTexture('bunny_jump')
+        }
+
+        if (vy > 0 && player.texture.key !== 'bunny_stand') {
+            player.setTexture('bunny_stand')
+        }
     }
 }
