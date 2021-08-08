@@ -41,6 +41,9 @@ export default class BunnyJumpScene extends Phaser.Scene {
         player.body.checkCollision.up = false
         player.body.checkCollision.left = false
         player.body.checkCollision.right = false
+
+        // Camera follow the player
+        this.cameras.main.startFollow(player)
     }
 
     update() {
