@@ -5,6 +5,7 @@ var platforms
 var player
 var cursors
 var carrots
+var carrotsCollected
 
 export default class BunnyJumpScene extends Phaser.Scene {
     constructor() {
@@ -62,6 +63,11 @@ export default class BunnyJumpScene extends Phaser.Scene {
 
         // Overlap player with the carrot
         this.physics.add.overlap(player, carrots, this.handleCollectCarrot, undefined, this)
+
+        // Initialize scoring
+        carrotsCollected = 0
+        const style = { color: '#000', fontSize: 24 }
+        this.carrotsCollectedText = this.add.text(240, 10, 'Carrots: 0', style).setScrollFactor(0).setOrigin(0.5)
     }
 
     update() {
@@ -130,5 +136,8 @@ export default class BunnyJumpScene extends Phaser.Scene {
     handleCollectCarrot(player, carrot) {
         carrots.killAndHide(carrot)
         this.physics.world.disableBody(carrot.body)
+        carrotsCollected++
+        const value = `Carrots: ${carrotsCollected}`
+        this.carrotsCollectedText.text = value
     }
 }
