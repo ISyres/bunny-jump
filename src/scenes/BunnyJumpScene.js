@@ -19,6 +19,9 @@ export default class BunnyJumpScene extends Phaser.Scene {
         this.load.image('bunny_jump', 'images/bunny1_jump.png')
         this.load.image('bunny_stand', 'images/bunny1_stand.png')
         this.load.image('replay_button', 'images/replay.png')
+
+        // import sfx
+        this.load.audio('jumpSound', 'sfx/phaseJump1.ogg')
     }
 
     create() {
@@ -79,6 +82,7 @@ export default class BunnyJumpScene extends Phaser.Scene {
         if (touchingDown) {
             player.setVelocityY(-300)
             player.setTexture('bunny_jump')
+            this.sound.play('jumpSound')
         }
 
         if (vy > 0 && player.texture.key !== 'bunny_stand') {
