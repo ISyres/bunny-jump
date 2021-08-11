@@ -106,6 +106,13 @@ export default class BunnyJumpScene extends Phaser.Scene {
         })
 
         this.horizontalWrap(player)
+
+        const bottomPlatform = this.findBottomMostPlatform()
+
+        if (player.y > bottomPlatform.y + 200) {
+            // console.log('Game Over')
+            this.scene.start('game-over-scene')
+        }
     }
 
     horizontalWrap(sprite) {
@@ -139,5 +146,20 @@ export default class BunnyJumpScene extends Phaser.Scene {
         carrotsCollected++
         const value = `Carrots: ${carrotsCollected}`
         this.carrotsCollectedText.text = value
+    }
+
+    findBottomMostPlatform() {
+        const platformsNumber = platforms.getChildren()
+        let bottomPlatform = platformsNumber[0]
+
+        for(let i = 1; i<platformsNumber.length; i++) {
+            const platform = platformsNumber[i]
+
+            if (platform.y < bottomPlatform.y) {
+                continue
+            }
+            bottomPlatform = platform
+        }
+        return bottomPlatform
     }
 }
