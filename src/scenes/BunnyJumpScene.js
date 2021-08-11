@@ -18,6 +18,7 @@ export default class BunnyJumpScene extends Phaser.Scene {
         this.load.image('carrot', 'images/carrot.png')
         this.load.image('bunny_jump', 'images/bunny1_jump.png')
         this.load.image('bunny_stand', 'images/bunny1_stand.png')
+        this.load.image('replay_button', 'images/replay.png')
     }
 
     create() {
