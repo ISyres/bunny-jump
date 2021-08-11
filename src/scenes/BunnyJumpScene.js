@@ -59,6 +59,9 @@ export default class BunnyJumpScene extends Phaser.Scene {
 
         // Collide carrot with platforms
         this.physics.add.collider(platforms, carrots)
+
+        // Overlap player with the carrot
+        this.physics.add.overlap(player, carrots, this.handleCollectCarrot, undefined, this)
     }
 
     update() {
@@ -114,9 +117,18 @@ export default class BunnyJumpScene extends Phaser.Scene {
         const y = sprite.y - sprite.displayHeight
         const carrot = carrots.get(sprite.x, y, 'carrot')
 
+        carrot.setActive(true)
+        carrot.setVisible(true)
+
         this.add.existing(carrot)
         carrot.body.setSize(carrot.width, carrot.height)
+        this.physics.world.enable(carrot)
 
         return carrot
+    }
+
+    handleCollectCarrot(player, carrot) {
+        carrots.killAndHide(carrot)
+        this.physics.world.disableBody(carrot.body)
     }
 }
