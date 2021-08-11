@@ -1,8 +1,10 @@
 import Phaser from 'phaser'
+import Carrot from '../game/Carrot'
 
 var platforms
 var player
 var cursors
+var carrots
 
 export default class BunnyJumpScene extends Phaser.Scene {
     constructor() {
@@ -51,6 +53,12 @@ export default class BunnyJumpScene extends Phaser.Scene {
 
         // Create dead zone
         this.cameras.main.setDeadzone(this.scale.width * 1.5)
+
+        // Initialize carrot
+        carrots = this.physics.add.group({ classType: Carrot })
+
+        // Collide carrot with platforms
+        this.physics.add.collider(platforms, carrots)
     }
 
     update() {
@@ -83,6 +91,8 @@ export default class BunnyJumpScene extends Phaser.Scene {
             if (platformChild.y >= scrollY + 700) {
                 platformChild.y = scrollY - Phaser.Math.Between(50, 100)
                 platformChild.body.updateFromGameObject()
+
+                this.addCarrotAbove(platformChild)
             }
         })
 
@@ -98,5 +108,15 @@ export default class BunnyJumpScene extends Phaser.Scene {
         } else if (sprite.x > gameWidth + halfWidth) {
             sprite.x = -halfWidth
         }
+    }
+
+    addCarrotAbove(sprite) {
+        const y = sprite.y - sprite.displayHeight
+        const carrot = carrots.get(sprite.x, y, 'carrot')
+
+        this.add.existing(carrot)
+        carrot.body.setSize(carrot.width, carrot.height)
+
+        return carrot
     }
 }
